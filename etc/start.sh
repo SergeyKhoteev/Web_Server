@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 if [[ `pwd` != '/home/box/web/etc' ]]
 then
 	cd /home/box
