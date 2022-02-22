@@ -14,4 +14,3 @@ sudo ln -s /home/box/web/etc/gunicorn/gunicorn.service /etc/systemd/system/gunic
 sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
 
 cd /home/box/web
-gunicorn -b 127.0.0.1:8080 -w=2 hello:app
