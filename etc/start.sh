@@ -2,15 +2,26 @@
 
 
 
-if [[ `pwd` != '/home/box/web/etc' ]]
-then
-	cp -r /home/box/Web_Server /home/box/web
-fi 
+# if [[ `pwd` != '/home/box/web/etc' ]]
+# then
+# 	cp -r /home/box/Web_Server /home/box/web
+# fi 
 
-ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-available/default
-sudo /etc/init.d/nginx start
+# ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-available/default
 
-sudo ln -s /home/box/web/etc/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
-sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
+# sudo /etc/init.d/nginx start
 
-cd /home/box/web
+# sudo /etc/init.d/mysql start
+
+sudo mysql -u root -e "CREATE DATABASE askask;"
+sudo mysql -u root -e "CREATE USER 'boxbox'@'localhost' IDENTIFIED BY 'password';"
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'box'@'localhost' WITH GRANT OPTION;"
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON \`ask\`.* TO 'box'@'localhost';"
+ 
+# sudo ln -s /home/box/web/etc/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
+# sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
+
+# cd /home/box/web
+
+# gunicorn -c gunicorn.hello.conf.py hello:app &
+# gunicorn -c gunicorn.django.conf.py ask.wsgi:application &

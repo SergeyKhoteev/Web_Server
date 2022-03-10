@@ -22,6 +22,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='title',
-            field=models.CharField(max_length=20, null=True),
+            field=models.CharField(max_length=255, null=True),
         ),
     ]

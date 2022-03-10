@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='question',
             name='title',
-            field=models.CharField(default='Question without mane', max_length=20),
+            field=models.CharField(default='Question without mane', max_length=255),
         ),
     ]
