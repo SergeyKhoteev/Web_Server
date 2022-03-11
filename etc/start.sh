@@ -13,10 +13,10 @@
 
 # sudo /etc/init.d/mysql start
 
-sudo mysql -u root -e "CREATE DATABASE askask;"
-sudo mysql -u root -e "CREATE USER 'boxbox'@'localhost' IDENTIFIED BY 'password';"
-sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'box'@'localhost' WITH GRANT OPTION;"
-sudo mysql -u root -e "GRANT ALL PRIVILEGES ON \`ask\`.* TO 'box'@'localhost';"
+sudo mysql -u root -e "CREATE DATABASE boxask1;"
+sudo mysql -u root -e "CREATE USER 'askbox1'@'localhost' IDENTIFIED BY 'ord';"
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'askbox1'@'localhost' WITH GRANT OPTION;"
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON \`boxask1\`.* TO 'askbox1'@'localhost';"
  
 # sudo ln -s /home/box/web/etc/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
 # sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
