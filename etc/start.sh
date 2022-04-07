@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 
 
@@ -23,5 +23,5 @@ sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunico
 
 cd /home/box/web
 
-gunicorn -c gunicorn.hello.conf.py hello:app &
-gunicorn -c gunicorn.django.conf.py ask.wsgi:application &
+#gunicorn -c gunicorn.hello.conf.py hello:app &
+#gunicorn -c gunicorn.django.conf.py ask.wsgi:application &
