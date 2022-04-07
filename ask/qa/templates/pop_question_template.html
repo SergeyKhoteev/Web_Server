@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		
+		Popular Questions
+
+	</title>
+</head>
+<body>
+
+	{% for item in q_list %}
+
+	<h1>	
+
+		{{ item.title }} 
+		<!-- {{ item.added_at|date:"SHORT_DATE_FORMAT" }} -->
+		
+		<a href=" {{ item.get_absolute_url }} "> link </a>
+	
+	</h1>
+
+	{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+    	
+        {% if q_list.has_previous %}
+        	<a href="?page=1">&laquo; first</a>
+            <a href="?page={{ q_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ q_list.number }} of {{ q_list.paginator.num_pages }}.
+        </span>
+
+        {% if q_list.has_next %}
+            <a href="?page={{ q_list.next_page_number }}">next</a>
+            <a href="?page={{ q_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+</body>
+</html>

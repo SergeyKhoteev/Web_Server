@@ -15,15 +15,18 @@ class Question(models.Model):
 	title = models.CharField(max_length=255, default='Question without name')
 	text = models.TextField(blank=True, null=True)
 	added_at = models.DateTimeField(auto_now_add=True, null=True)
-	rating = models.IntegerField(null=True)
+	rating = models.IntegerField(default=0)
 	author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	likes = models.ManyToManyField(User, related_name='likes')
 
-	objects = models.Manager()
-	question_manager = QuestionManager()
+	objects = QuestionManager()
 
 	def __str__(self):
 		return self.title
+
+	def get_absolute_url(self):
+		from django.urls import reverse
+		return reverse('question_page', kwargs={'pk': self.id})
 
 
 class Answer(models.Model):
@@ -33,4 +36,4 @@ class Answer(models.Model):
 	author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 	def __str__(self):
-		return self.title
+		return self.text
