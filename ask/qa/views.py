@@ -15,10 +15,13 @@ def new_questions(request):
 
     page_number = request.GET.get('page')
 
-    if page_number is None:
-        page_number = 1
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
 
-    page_obj = paginator.get_page(page_number)
     context = {'q_list': page_obj}
 
     return render(request, 'new_question_template.html', context)
@@ -31,10 +34,13 @@ def pop_questions(request):
 
     page_number = request.GET.get('page')
 
-    if page_number is None:
-        page_number = 1
-
-    page_obj = paginator.get_page(page_number)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    
     context = {'q_list': page_obj}
 
     return render(request, 'pop_question_template.html', context)

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from views import index
-from qa.views import new_questions, pop_questions
+from qa.views import new_questions, pop_questions, index
 
 
 # from django.urls import include, re_path

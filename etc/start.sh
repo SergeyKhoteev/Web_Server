@@ -7,9 +7,13 @@ then
 	cp -r /home/box/Web_Server /home/box/web
 fi 
 
-ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-available/default
+sudo rm /etc/nginx/sites-available/default
+sudo rm /etc/nginx/sites-enabled/default
+sudo ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-available/default
+sudo ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-enabled/default
 
 sudo /etc/init.d/nginx restart
+sudo /etc/init.d/nginx reload
  
 sudo ln -s /home/box/web/etc/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
 sudo ln -s /home/box/web/etc/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
@@ -28,7 +32,5 @@ sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'askbox1'@'localhost' WITH
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON \`boxask1\`.* TO 'askbox1'@'localhost';"
 
 cd ~/web/ask
-
-python3 manage.py makemigrations qa
 
 python3 manage.py migrate
