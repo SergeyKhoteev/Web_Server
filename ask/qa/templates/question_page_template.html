@@ -14,5 +14,20 @@
 		{{ answer.text }}		 
 	</div>
 	{% endfor %}
+
+	{% if form.non_fields_errors %}
+		<p> {{ form.non_fields_errors }} </p>
+	{% endif %}
+
+	<form action="{% url 'question_page' question.pk %}" method="post">
+
+		{% csrf_token %}
+		
+		{% for line in form %}
+		<p> {{ line }} </p>
+		{% endfor %}
+
+		<button type="submit">ADD ANSWER</button>
+	</form>
 </body>
 </html>

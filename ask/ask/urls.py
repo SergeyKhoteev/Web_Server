@@ -1,5 +1,5 @@
 from django.contrib import admin
-from qa.views import new_questions, pop_questions, index
+from qa.views import new_questions, pop_questions, index, add_question_page
 
 
 # from django.urls import include, re_path
@@ -10,7 +10,7 @@ from qa.views import new_questions, pop_questions, index
 #     re_path(r'^popular\/$', pop_questions, name='pop_questions'),
 #     re_path(r'^new\/$', index),
 #     re_path(r'^signup\/$', index),
-#     re_path(r'^ask\/$', index),
+#     re_path(r'^ask\/$', add_question_page, name='add_question_page'),
 # ]
 
 
@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^popular\/$', pop_questions, name='pop_questions'),
     url(r'^new\/$', index),
     url(r'^signup\/$', index),
-    url(r'^ask\/$', index),
+    url(r'^ask\/$', add_question_page, name='add_question_page'),
 ]
