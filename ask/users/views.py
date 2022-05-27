@@ -31,8 +31,8 @@ def signup(request):
 	context = {
 	'form': form,
 	'MainMenu': MainMenu,
-    'SideMenu': SideMenu,
-    'PageName': "Sign Up"
+	'SideMenu': SideMenu,
+	'PageName': "Sign Up"
 	}
 
 	return render(
@@ -63,8 +63,8 @@ def login(request):
 	context = {
 	'form': form,
 	'MainMenu': MainMenu,
-    'SideMenu': SideMenu,
-    'PageName': "Log In"
+	'SideMenu': SideMenu,
+	'PageName': "Log In"
 	}
 
 	return render(

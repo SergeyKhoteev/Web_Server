@@ -3,7 +3,6 @@ import random
 import string
 import datetime
 from django.utils import timezone
-import pytz
 
 
 # Create your models here.

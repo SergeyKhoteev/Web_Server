@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^$', new_questions, name='new_questions'),
     url(r'question\/', include('qa.urls')),
     url(r'^popular\/$', pop_questions, name='pop_questions'),
-    url(r'^new\/$', signup, name='signup'),
-    url(r'^signup\/$', login, name='login'),
+    url(r'^new\/$', index),
+    url(r'^signup\/$', signup, name='signup'),
+    url(r'login\/$', login, name='login'),
     url(r'^ask\/$', add_question_page, name='add_question_page'),
 ]
