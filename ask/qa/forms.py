@@ -1,5 +1,6 @@
 from django import forms
 from .models import Question, Answer
+from users.models import MyUser
 
 
 
@@ -8,34 +9,33 @@ class AskForm(forms.Form):
 	title = forms.CharField(max_length=255, required=True)
 	text = forms.CharField()
 
+	def __init__(self, user,*args, **kwargs):
+
+		self._user = user
+		super(AskForm, self).__init__(*args, **kwargs)
+
 	def save(self):
 
-		question = Question(**self.cleaned_data)
-		question.save()
+		self.cleaned_data['author'] = self._user
 
-		return question
+		return Question.objects.create(**self.cleaned_data)
 
 
 class AnswerForm(forms.Form):
 
 	text = forms.CharField()
-	question = forms.ModelChoiceField(queryset=Question.objects.all())
+
+	def __init__(self, user, question,*args, **kwargs):
+
+		self._user = user
+		self._question = question
+		super(AnswerForm, self).__init__(*args, **kwargs)
 
 	def save(self):
 
-		answer = Answer(**self.cleaned_data)
-		print(answer)
-		answer.save()
+		self.cleaned_data['question'] = self._question
+		self.cleaned_data['author'] = self._user
 
-		return answer
 
-	# def clean_text(self):
-
-	# 	text = self.cleaned_data['text']
-	# 	answers = Answer.objects.all()
-
-	# 	for answer in answers:
-	# 		if answer.text == text:
-	# 			raise forms.ValidationError(
-	# 				'Answer already exists')
+		return Answer.objects.create(**self.cleaned_data)
 

@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from qa.models import Question
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import AskForm, AnswerForm
+from django.urls import reverse
+from ask.views import MainMenu, SideMenu
+from users.models import Session 
 
 
 def index(request):
@@ -10,6 +13,15 @@ def index(request):
 
 def new_questions(request):
 
+    sessid = request.COOKIES.get('sessionid', None)
+    print(sessid)
+    # if sessid:
+    #     session = Session.objects.get(session_id=sessid)
+    #     print(session)
+    #     user = session.user
+    #     print(user)
+    # else:
+    #     return redirect(reverse('login'))
 
     question_list = Question.objects.new()
     paginator = Paginator(question_list, 10)
@@ -23,7 +35,13 @@ def new_questions(request):
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
 
-    context = {'q_list': page_obj}
+    context = {
+    # 'User': user,
+    'MainMenu': MainMenu,
+    'SideMenu': SideMenu,
+    'q_list': page_obj,
+    'PageName': "New Questions"
+    }
 
     return render(request, 'new_question_template.html', context)
 
@@ -42,36 +60,46 @@ def pop_questions(request):
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
 
-    context = {'q_list': page_obj}
+    context = {
+    'MainMenu': MainMenu,
+    'SideMenu': SideMenu,
+    'q_list': page_obj,
+    'PageName': "Popular Questions"
+    }
 
     return render(request, 'pop_question_template.html', context)
 
 
 def question_page(request, pk):
 
+    sessid = request.COOKIES.get('sessionid', None)
+    if sessid:
+        session = Session.objects.get(session_id=sessid)
+        user = session.user
+    else:
+        return redirect(reverse('login'))
+
     try:
         question = Question.objects.get(pk=pk)
         answers = question.answer_set.all()
 
         if request.method == 'POST':
-            form = AnswerForm(request.POST)
+            form = AnswerForm(user, question, request.POST)
             if form.is_valid():
-                try:
-                    answer = form.save()
-                    url = question.get_absolute_url()
-                    return HttpResponseRedirect(url)
+                form.save()
 
-                except:
-                    form.add_error(None, 'Failed to create question')
-
-
+                return redirect(reverse('question_page',kwargs={'pk': question.pk} ))
         else:
-            form = AnswerForm()
+            form = AnswerForm(user, question)
 
         context = {
+        'User': user,
         'question': question,
         'answers': answers,
         'form': form,
+        'MainMenu': MainMenu,
+        'SideMenu': SideMenu,
+        'PageName': question.title
         }
 
     except Question.DoesNotExist:
@@ -82,8 +110,15 @@ def question_page(request, pk):
 
 def add_question_page(request):
 
+    sessid = request.COOKIES.get('sessionid', None)
+    if sessid:
+        session = Session.objects.get(session_id=sessid)
+        user = session.user
+    else:
+        return redirect(reverse('login'))
+
     if request.method == 'POST':
-        form = AskForm(request.POST)
+        form = AskForm(user, request.POST)
         if form.is_valid():
             try:
                 question = form.save()
@@ -95,11 +130,14 @@ def add_question_page(request):
 
 
     else:
-        form = AskForm()
+        form = AskForm(user)
 
 
     context = {
         'form': form,
+        'MainMenu': MainMenu,
+        'SideMenu': SideMenu,
+        'PageName': 'Add new question'
         }
 
-    return render(request, 'add.html', context)
+    return render(request, 'add_question_template.html', context)

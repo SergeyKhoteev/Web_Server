@@ -1,0 +1,20 @@
+{% extends 'ask/base_template.html' %}
+
+{% block MainContent %}
+
+	<form action="{% url 'add_question_page' %}" method="post">
+		
+		{% csrf_token %}
+		
+			{% for field in form %}
+				<div class="control-group
+				{% if field.errors %}has-error{% endif %}">
+				<label class="control-label">{{ field.label }}</label>
+				<div class="controls">{{ field }}</div>
+				</div>
+			{% endfor %}
+
+		<button type="submit">ADD QUESTION</button>
+	</form>
+
+{% endblock %}

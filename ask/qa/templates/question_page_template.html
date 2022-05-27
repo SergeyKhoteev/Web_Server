@@ -1,33 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-</head>
-<body>
-	<h1> {{ question.title }} </h1>
-	<h2> {{ question.text }} </h2>
+{% extends 'ask/base_template.html' %}
 
-	{% for answer in answers %}
-	<div>
-		{{ answer.text }}		 
+{% block MainContent %}
+
+	<p> Hello, {{ User.username }} </p>
+
+	<p> Title: {{ question.title }} </p>
+	<p> Author: {{ question.author }} </p>
+	<p> Question text: {{ question.text }} </p>
+
+	<div> 
+		<h1> ANSWERS: </h1>
+			{% for answer in answers %}
+			<div>
+				{{ answer.text }}
+				{{ answer.author }}		 
+			</div>
+			{% endfor %}
 	</div>
-	{% endfor %}
 
-	{% if form.non_fields_errors %}
-		<p> {{ form.non_fields_errors }} </p>
-	{% endif %}
+	<h1> ADD ANSWER </h1>
 
-	<form action="{% url 'question_page' question.pk %}" method="post">
-
-		{% csrf_token %}
-		
-		{% for line in form %}
-		<p> {{ line }} </p>
+		{% for e in form.non_field_errors %}
+			<div class="alert alert-danger">{{ e }}</div>
 		{% endfor %}
 
-		<button type="submit">ADD ANSWER</button>
+
+	<form class="form-horizontal" action="{% url 'question_page' question.pk %}" method="post">
+
+		{% csrf_token %}
+			
+			{% for field in form %}
+				<div class="control-group
+				{% if field.errors %}has-error{% endif %}">
+				<label class="control-label">{{ field.label }}</label>
+				<div class="controls">{{ field }}</div>
+				</div>
+			{% endfor %}
+			
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary"> ADD </button>
+		</div>
 	</form>
-</body>
-</html>
+
+{% endblock %}

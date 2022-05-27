@@ -1,0 +1,45 @@
+{% extends 'ask/base_template.html' %}
+
+{% block MainContent %}
+
+<!-- 	{% if form.errors %}
+		<p> {{ form.errors }} </p>
+	{% endif %}
+
+	<form action="{% url 'login' %}" method="post">
+		
+		{% csrf_token %}
+		
+		{% for line in form %}
+		<p> {{ line }} </p>
+		{% endfor %}
+
+		<button type="submit">SIGN UP</button>
+	</form> -->
+
+	{% for e in form.non_field_errors %}
+		<div class="alert alert-danger">{{ e }}</div>
+	{% endfor %}
+
+
+	<form class="form-horizontal" action="{% url 'signup' %}" method="post">
+
+		{% csrf_token %}
+			
+			{% for field in form %}
+				<div class="control-group">
+					{% if field.errors %}
+						{{ field.errors }}
+					{% endif %}
+				</div>
+				<label class="control-label">{{ field.label }}</label>
+				<div class="controls">{{ field }}</div>
+			{% endfor %}
+			
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary"> SIGN UP </button>
+		</div>
+	</form>
+
+
+{% endblock %}

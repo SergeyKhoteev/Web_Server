@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from users.models import MyUser
 
 
 class QuestionManager(models.Manager):
@@ -16,8 +16,8 @@ class Question(models.Model):
 	text = models.TextField(blank=True, null=True)
 	added_at = models.DateTimeField(auto_now_add=True, null=True)
 	rating = models.IntegerField(default=0)
-	author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-	likes = models.ManyToManyField(User, related_name='likes')
+	author = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
+	likes = models.ManyToManyField(MyUser, related_name='likes')
 
 	objects = QuestionManager()
 
@@ -33,7 +33,7 @@ class Answer(models.Model):
 	text = models.TextField(blank=True, null=True)
 	added_at = models.DateTimeField(auto_now_add=True, null=True)
 	question = models.ForeignKey('Question', on_delete=models.CASCADE, null=True)
-	author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	author = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
 
 	def __str__(self):
 		return self.text

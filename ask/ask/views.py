@@ -1,17 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from qa.models import Question
 
+MainMenu = {
+	'Sign Up': 'signup',
+	'Log In': 'login'
+}
 
-# def new_questions(request):
-
-#     question_list = Question.objects.new()
-
-#     context = {'print_list': question_list}
-
-#     template = 'qa/templates/blank_template.html'
-
-#     return render(request, template, context)
-
-
-# Create your views here.
+SideMenu = {
+	'New Questions': 'new_questions',
+	'Popular Questions': 'pop_questions',
+	'Add Question': 'add_question_page',
+}

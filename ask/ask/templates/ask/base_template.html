@@ -1,0 +1,28 @@
+{% extends "ask/base.html" %}
+
+{% block MainMenu %}
+
+	{% if User %}
+
+		<span> Hello, {{User.username}} </span>
+
+	{% endif %}
+
+	{% for key, value in MainMenu.items %}
+
+		<a class='menu__item' href=" {% url value %} "> {{key}} </a>
+
+	{% endfor %}
+
+{% endblock %}
+
+
+{% block SideMenu %}
+		<p>
+	{% for key, value in SideMenu.items %}
+
+			<a class='menu__item' href=" {% url value %} "> {{key}} </a>	
+
+	{% endfor %}
+		</p>
+{% endblock %}

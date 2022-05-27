@@ -1,0 +1,31 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+	<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"> -->
+	<title> {{ PageName }} </title>
+</head>
+<body>
+	<header class='header'>
+		<nav class="menu">
+			{% block MainMenu %} {% endblock %}
+		</nav>
+	</header>
+	<div class='content'>
+		<aside class='content_sidebar'>
+			{% block SideMenu %} {% endblock %} 
+		</aside>
+		<section class='content_section'>
+			<div class="contetn_div"> 
+				{% block MainContent %} {% endblock %} 
+			</div>
+		</section>
+	</div>
+	<footer class='footer'>FOOTER</footer>
+</body>
+</html>
