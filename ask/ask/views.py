@@ -3,7 +3,8 @@ from django.shortcuts import render
 
 MainMenu = {
 	'Sign Up': 'signup',
-	'Log In': 'login'
+	'Log In': 'login',
+	'Log Out': 'logout'
 }
 
 SideMenu = {

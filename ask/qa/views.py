@@ -14,14 +14,6 @@ def index(request):
 def new_questions(request):
 
     sessid = request.COOKIES.get('sessionid', None)
-    print(sessid)
-    # if sessid:
-    #     session = Session.objects.get(session_id=sessid)
-    #     print(session)
-    #     user = session.user
-    #     print(user)
-    # else:
-    #     return redirect(reverse('login'))
 
     question_list = Question.objects.new()
     paginator = Paginator(question_list, 10)
@@ -114,30 +106,32 @@ def add_question_page(request):
     if sessid:
         session = Session.objects.get(session_id=sessid)
         user = session.user
+
+        if request.method == 'POST':
+            form = AskForm(user, request.POST)
+            if form.is_valid():
+                try:
+                    question = form.save()
+                    url = question.get_absolute_url()
+                    return HttpResponseRedirect(url)
+
+                except:
+                    form.add_error(None, 'Failed to create question')
+
+
+        else:
+            form = AskForm(user)
+
+
+        context = {
+            'form': form,
+            'MainMenu': MainMenu,
+            'SideMenu': SideMenu,
+            'PageName': 'Add new question'
+            }
+
     else:
-        return redirect(reverse('login'))
 
-    if request.method == 'POST':
-        form = AskForm(user, request.POST)
-        if form.is_valid():
-            try:
-                question = form.save()
-                url = question.get_absolute_url()
-                return HttpResponseRedirect(url)
-
-            except:
-                form.add_error(None, 'Failed to create question')
-
-
-    else:
-        form = AskForm(user)
-
-
-    context = {
-        'form': form,
-        'MainMenu': MainMenu,
-        'SideMenu': SideMenu,
-        'PageName': 'Add new question'
-        }
-
+        context = {}
+    
     return render(request, 'add_question_template.html', context)

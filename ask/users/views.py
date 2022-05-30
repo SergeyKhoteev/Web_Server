@@ -3,8 +3,10 @@ from django.http import HttpResponseRedirect
 from .forms import SignUpForm, LogInForm
 from django.urls import reverse
 from ask.views import MainMenu, SideMenu
+from users.models import Session
 
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 # Create your views here.
 
@@ -71,3 +73,21 @@ def login(request):
 		request,
 		'users/login.html',
 		context)
+
+def logout(request):
+
+	sessid = request.COOKIES.get('sessionid', None)
+
+	session = Session.objects.get(session_id=sessid)
+	expire_date = timezone.now() - timedelta(days=3)
+
+	url = '/'
+	response = HttpResponseRedirect(url)
+	response.set_cookie(
+		'sessionid',
+		session.session_id,
+		expires = expire_date)
+
+	session.delete()
+
+	return(response)

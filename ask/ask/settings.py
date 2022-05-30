@@ -83,25 +83,25 @@ WSGI_APPLICATION = 'ask.wsgi.application'
 
 DATABASES = {
 
-    # 'default' : {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'ask_db',
-    #     'USER': 'ask_django',
-    #     'PASSWORD': 'ask',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '5432',
-    # },
+    'default' : {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ask_db',
+        'USER': 'ask_django',
+        'PASSWORD': 'ask',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    },
     
 
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'boxask1',
-        'USER': 'askbox1',
-        'PASSWORD': 'ord',
-        'HOST': 'localhost',
-        'PORT': '',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'boxask1',
+    #     'USER': 'askbox1',
+    #     'PASSWORD': 'ord',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
         
-    },
+    # },
     
 
 }
