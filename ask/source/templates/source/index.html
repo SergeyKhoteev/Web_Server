@@ -1,0 +1,35 @@
+
+{% extends "ask/base_template.html" %}
+
+
+{% block MainContent %}
+
+  <table border="1">
+   <caption> {{ index.ticker }} Index Compostion </caption>
+   <tr>
+    <th>#</th>
+   	<th>Ticker</th>
+    <th>ShareName</th>
+    <th>Weight</th>
+    <th>CompanyName</th>
+    <th>Sector</th>
+    <th>DateModified</th>
+   </tr>
+    
+    {% for item in shares_list %}
+
+   		<tr>
+        <td> {{forloop.counter}} </td>
+   			<td> <a href=" {{item.share.get_absolute_url}} "> {{ item.share.ticker}} </a> </td>
+   			<td> {{ item.share.index_short_name }} </td>
+   			<td> {{ item.weight | floatformat:2}} </td>
+   			<td> {{ item.share.company.company_name}} </td>
+   			<td> {{ item.share.index_sector}} </td>
+        <td> {{ item.dt_modified|date:"d.m.y." }} </td>
+   		</tr>
+        
+    {% endfor %}
+   
+   </table>
+
+{% endblock %}

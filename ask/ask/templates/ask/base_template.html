@@ -4,25 +4,21 @@
 
 	{% if User %}
 
-		<span> Hello, {{User.username}} </span>
+		<span class="menu__item"> Hello, <a href=" {{ User.get_absolute_url }} ">{{User.username}}</a>  </span>
+		<a class='menu__item' href=" {% url 'logout' %} "> Log Out </a>
+
+	{% else %}
+
+		<a class='menu__item' href=" {% url 'login' %} "> Log In </a>
+		<a class='menu__item' href=" {% url 'signup' %} "> Sign Up </a>
 
 	{% endif %}
-
-	{% for key, value in MainMenu.items %}
-
-		<a class='menu__item' href=" {% url value %} "> {{key}} </a>
-
-	{% endfor %}
 
 {% endblock %}
 
 
 {% block SideMenu %}
-		<p>
-	{% for key, value in SideMenu.items %}
-
-			<a class='menu__item' href=" {% url value %} "> {{key}} </a>	
-
-	{% endfor %}
-		</p>
+	{% if User %}
+		<a href="{% url 'new_portfolio' User.username %}"> Add portfolio </a>
+	{% endif %}
 {% endblock %}

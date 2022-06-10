@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+	<title>Document</title>
+</head>
+<body>
+	<header class='header'>
+		<nav class="menu">
+					{% block mainmenu %} {% endblock %}
+<!-- 					<a class="menu__item" href="">blog</a>
+					<a class="menu__item" href="">services</a>content_sidebar
+					<a class="menu__item" href="">about</a>
+					<a class="menu__item" href="">contact us</a>
+					<a class="menu__item" href="">log in</a> -->
+		</nav>
+	</header>
+	<div class='content'>
+		<aside class='content_sidebar'>{% block sidemenu %} {% endblock %} </aside>
+		<section class='content_section'> {% block content %} {% endblock %} </section>
+	</div>
+	<footer class='footer'>FOOTER</footer>
+</body>
+</html>

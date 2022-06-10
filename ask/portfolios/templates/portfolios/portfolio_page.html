@@ -1,0 +1,84 @@
+
+{% extends 'source/start_page.html' %}
+
+{% block MainContent %}
+
+
+  <h2> {{Portfolio.Name}} </h2>
+  <h3> Portfolio follows: {{Portfolio.IndexToFollow}} </h3>
+  <h3> Portfolio target: {{Portfolio.Target}} </h3>
+  <h3> Portfolio market price: {{Portfolio.total_cost_market}}  </h3>
+  <h3> Total change: {{Portfolio.total_change_abs}} ( {{ Portfolio.total_change_rel|floatformat:2 }}% )  </h3>
+
+
+ <table border="1">
+   <caption> {{ Portfolio.Name }} Compostion </caption>
+   <tr>
+    <th>#</th>
+   	<th>Symbol</th>
+    <th>Shares</th>
+    <th>Cost</th>
+    <th>TargetSum</th>
+    <th>TargetQuantity</th>
+    <th>MarketPrice</th>
+    <th>Trade Date</th>
+    <th>Remove</th>
+   </tr>
+    
+    {% if not PortfolioList %}
+
+      <tr>
+        <td colspan="7" align="center" >NO ITEMS </td>
+      </tr>
+
+    {% else %}
+
+      {% for item in PortfolioList %}
+
+     		<tr>
+  	        <td> {{forloop.counter}} </td>
+  			<td> <a href=" {{item.Symbol.get_absolute_url}} "> {{ item.Symbol }} </a> </td>
+  			<td> {{ item.Quantity }} </td>
+  			<td> {{ item.Cost}} </td>
+        <td> {{ item.TargetSum }} </td>
+        <td> {{ item.TargetQuantity }} </td>
+        <td> {{ item.Symbol.market_price }} </td>
+  	    <td> {{ item.TradeDate|date:"d.m.y." }} </td>
+        <td align="center">
+              <form action="{% url 'delete_symbol_from_portfolio' username=User.username portfolio_pk=Portfolio.pk port_struct_pk=item.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+              </form>
+
+        </td>
+     		</tr>
+          
+      {% endfor %}
+   
+    {% endif %}
+
+   </table>
+
+    <form action="{% url 'portfolio_page' username=User.username portfolio_pk=Portfolio.pk %}" method="post">
+      {% csrf_token %}
+      
+      <div> 
+
+        {% for error in form.non_field_errors %}
+        <p> {{ error }} </p>
+        {% endfor %}
+
+      </div>
+
+      {% for item in form%}
+        <p> <label class="form-label" for="{{ item.id_for_label }}"> {{ item.label }} </label> {{ item }} </p>
+        <div class="form-error"> {{ item.errors }} </div>
+      {% endfor %}
+
+      <button type="submit">Add symbol</button>
+
+    </form>
+
+
+
+{% endblock %}

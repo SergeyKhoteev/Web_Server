@@ -1,0 +1,22 @@
+{% extends 'ask/base_template.html' %}
+
+
+{% block content %}
+	<ul>
+		
+
+		{% for item in PortfolioList %}
+			<h1> 
+				<a href="{{ item.get_absolute_url }}">{{ item.Name }}</a> 
+				<li> Index to Follow: {{item.IndexToFollow}} </li>
+				<li> Target: {{item.Target}} </li>
+				<li> Total cost: {{ item.total_cost_market }} </li>
+
+			</h1>
+		{% endfor %}
+
+
+
+	</ul>
+
+{% endblock %}

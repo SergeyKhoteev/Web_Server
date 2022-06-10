@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'ask',
     'qa',
     'users',
+    'source',
+    'portfolios'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'ask.middleware.FirstMiddleWare'
 ]
 
 ROOT_URLCONF = 'ask.urls'

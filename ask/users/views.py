@@ -1,93 +1,41 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
-from .forms import SignUpForm, LogInForm
 from django.urls import reverse
+from django.core.exceptions import PermissionDenied
+from django.utils import timezone
+from datetime import datetime, timedelta
+
 from ask.views import MainMenu, SideMenu
 from users.models import Session
-
-from datetime import datetime, timedelta
-from django.utils import timezone
+from users.forms import SignUpForm, LogInForm
+from qa.models import Question
+from portfolios.models import UserPortfolio
 
 # Create your views here.
 
 
-def signup(request):
+def user_page(request, username):
 
-	if request.method == 'POST':
-		form = SignUpForm(request.POST)
-		url = request.POST.get('continue', '/')
-		if form.is_valid():
-			session = form.save_and_login_user()
-			if session:
-				response = HttpResponseRedirect(url)
-				response.set_cookie(
-					'sessionid', 
-					session.session_id, 
-					expires=session.expire_date, 
-					httponly=True
-					)
-				return response
-	else:
-		form = SignUpForm()
+	if not request._user:
+		return redirect(reverse('login'))
+	if request._user.username != username:
+		raise PermissionDenied
+
+	my_questions = Question.objects.filter(author=request._user)
+	my_portfolios = UserPortfolio.objects.filter(Owner=request._user)
 
 	context = {
-	'form': form,
+	'User': request._user,
+	'Questions': my_questions,
+	'Portfolios': my_portfolios,
 	'MainMenu': MainMenu,
 	'SideMenu': SideMenu,
-	'PageName': "Sign Up"
 	}
 
 	return render(
-		request,
-		'users/signup.html',
-		context)
+	request,
+	'users/userpage_template.html',
+	context
+	)
 
-def login(request):
 
-	if request.method == 'POST':
-		form = LogInForm(request.POST)
-		url = request.POST.get('continue', '/')
-		if form.is_valid():
-			session = form.do_login()
-			if session:
-				response = HttpResponseRedirect(url)
-				response.set_cookie(
-					'sessionid', 
-					session.session_id, 
-					expires=session.expire_date, 
-					httponly=True
-					)
-				print(session.session_id)
-				return response
-	else:
-		form = LogInForm()
-
-	context = {
-	'form': form,
-	'MainMenu': MainMenu,
-	'SideMenu': SideMenu,
-	'PageName': "Log In"
-	}
-
-	return render(
-		request,
-		'users/login.html',
-		context)
-
-def logout(request):
-
-	sessid = request.COOKIES.get('sessionid', None)
-
-	session = Session.objects.get(session_id=sessid)
-	expire_date = timezone.now() - timedelta(days=3)
-
-	url = '/'
-	response = HttpResponseRedirect(url)
-	response.set_cookie(
-		'sessionid',
-		session.session_id,
-		expires = expire_date)
-
-	session.delete()
-
-	return(response)

@@ -1,0 +1,13 @@
+{% extends 'ask/base_template.html' %}
+
+
+{% block MainContent %}
+	<ul>
+
+		{% for item in ETFList %}
+
+			<li> <a href="{{ item.get_absolute_url }}"> {{ item.ticker }} </a> </li>
+
+		{% endfor %} 
+	</ul>
+{% endblock %}

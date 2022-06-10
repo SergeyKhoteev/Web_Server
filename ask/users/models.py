@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import random
 import string
 import datetime
@@ -14,8 +15,10 @@ class MyUser(models.Model):
 	password = models.CharField(max_length=255, null=True, blank=False)
 
 	def __str__(self):
-
 		return self.username
+
+	def get_absolute_url(self):
+		return reverse('user_page', kwargs={'username':self.username})
 
 
 class Session(models.Model):

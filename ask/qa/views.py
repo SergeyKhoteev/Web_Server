@@ -1,19 +1,19 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from qa.models import Question
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import AskForm, AnswerForm
 from django.urls import reverse
+
+from qa.models import Question
+from qa.forms import AskForm, AnswerForm
 from ask.views import MainMenu, SideMenu
 from users.models import Session 
 
 
-def index(request):
+def index(request, *args, **kwargs):
     return HttpResponse("Hello, world. You're at the polls index.")
 
-def new_questions(request):
 
-    sessid = request.COOKIES.get('sessionid', None)
+def new_questions(request):
 
     question_list = Question.objects.new()
     paginator = Paginator(question_list, 10)
@@ -28,7 +28,7 @@ def new_questions(request):
         page_obj = paginator.page(paginator.num_pages)
 
     context = {
-    # 'User': user,
+    'User': request._user,
     'MainMenu': MainMenu,
     'SideMenu': SideMenu,
     'q_list': page_obj,
@@ -53,6 +53,7 @@ def pop_questions(request):
         page_obj = paginator.page(paginator.num_pages)
 
     context = {
+    'User': request._user,
     'MainMenu': MainMenu,
     'SideMenu': SideMenu,
     'q_list': page_obj,
@@ -64,28 +65,22 @@ def pop_questions(request):
 
 def question_page(request, pk):
 
-    sessid = request.COOKIES.get('sessionid', None)
-    if sessid:
-        session = Session.objects.get(session_id=sessid)
-        user = session.user
-    else:
-        return redirect(reverse('login'))
-
     try:
         question = Question.objects.get(pk=pk)
         answers = question.answer_set.all()
 
         if request.method == 'POST':
-            form = AnswerForm(user, question, request.POST)
+            if not request._user:
+                return redirect(reverse('login'))
+            form = AnswerForm(request._user, question, request.POST)
             if form.is_valid():
                 form.save()
-
                 return redirect(reverse('question_page',kwargs={'pk': question.pk} ))
         else:
-            form = AnswerForm(user, question)
+            form = AnswerForm(request._user, question)
 
         context = {
-        'User': user,
+        'User': request._user,
         'question': question,
         'answers': answers,
         'form': form,
@@ -102,36 +97,27 @@ def question_page(request, pk):
 
 def add_question_page(request):
 
-    sessid = request.COOKIES.get('sessionid', None)
-    if sessid:
-        session = Session.objects.get(session_id=sessid)
-        user = session.user
+    if not request._user:
+        return(redirect(reverse('login')))
 
-        if request.method == 'POST':
-            form = AskForm(user, request.POST)
-            if form.is_valid():
-                try:
-                    question = form.save()
-                    url = question.get_absolute_url()
-                    return HttpResponseRedirect(url)
-
-                except:
-                    form.add_error(None, 'Failed to create question')
-
-
-        else:
-            form = AskForm(user)
-
-
-        context = {
-            'form': form,
-            'MainMenu': MainMenu,
-            'SideMenu': SideMenu,
-            'PageName': 'Add new question'
-            }
-
+    if request.method == 'POST':
+        form = AskForm(request._user, request.POST)
+        if form.is_valid():
+            try:
+                question = form.save()
+                url = question.get_absolute_url()
+                return HttpResponseRedirect(url)
+            except:
+                form.add_error(None, 'Failed to create question')
     else:
+        form = AskForm(request._user)
 
-        context = {}
+    context = {
+        'User': request._user,
+        'form': form,
+        'MainMenu': MainMenu,
+        'SideMenu': SideMenu,
+        'PageName': 'Add new question'
+        }
     
     return render(request, 'add_question_template.html', context)
